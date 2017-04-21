@@ -1,7 +1,7 @@
 # Network lab
 This script creates a set of network namespaces, linked by virtual eth connections. It is entirely driven by a JSON network graph configuration format. Additionally, it uses the [tc netem](http://man7.org/linux/man-pages/man8/tc-netem.8.html) traffic shaper to simulate various kinds of faulty connections, packet loss, and latency on the links. This tool was created to experiment with and test routing protocols, but it could have many other uses.
 
-![JSON to network diagram](/network-lab.svg)
+![JSON to network diagram](https://raw.githubusercontent.com/sudomesh/network-lab/master/network-lab.svg)
 
 ## Dependencies
 Your system must have network namespace support. For example, Ubuntu 16.04 will work. Also, [jq](https://stedolan.github.io/jq/) must be installed.
