@@ -67,5 +67,3 @@ do
     done <<< "$scripts"
   fi
 done
-
-alias jample="echo herp"
