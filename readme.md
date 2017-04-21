@@ -6,26 +6,6 @@ This script creates a set of network namespaces, linked by virtual eth connectio
 ## Dependencies
 Your system must have network namespace support. For example, Ubuntu 16.04 will work. Also, [jq](https://stedolan.github.io/jq/) must be installed.
 
-## Usage
-Most operations on network namespaces require `sudo`, and the network-lab sets some handy aliases for working with network namespaces. So the preferred way to start it currently is like this:
-
-```bash
-sudo -i
-source ./network-lab.sh example-network.json
-```
-
-To do operations inside the namespaces, you can now use the aliases defined by the script:
-
-```bash
-n<node name> <your command>
-```
-for example
-```bash
-$ n1 ip route
-1.0.0.2 dev veth-1-2  scope link 
-1.0.0.3 via 1.0.0.2 dev veth-1-2 
-```
-
 ## Configuration
 Network lab has a JSON configuration format:
 
@@ -74,3 +54,29 @@ The `nodes` object has all the nodes, indexed by name.
 The `edges` object contains an array of edges.
 - The `nodes` array contains the node names of the 2 sides of the edge.
 - The `->` and `<-` properties contain arguments to be given to the [tc netem](http://man7.org/linux/man-pages/man8/tc-netem.8.html) command to degrade the connection from the left node to the right node and vice vera.
+
+## Usage
+Most operations on network namespaces require `sudo`, and the network-lab sets some handy aliases for working with network namespaces. So the preferred way to start it currently is like this:
+
+```bash
+sudo -i
+source ./network-lab.sh example-network.json
+```
+
+To do operations inside the namespaces, you can now use the aliases defined by the script:
+
+```bash
+n<node name> <your command>
+```
+for example
+```bash
+$ n1 ip route
+1.0.0.2 dev veth-1-2  scope link 
+1.0.0.3 via 1.0.0.2 dev veth-1-2
+
+$ n1 ping 1.0.0.3
+PING 1.0.0.3 (1.0.0.3) 56(84) bytes of data.
+64 bytes from 1.0.0.3: icmp_seq=1 ttl=63 time=1983 ms
+64 bytes from 1.0.0.3: icmp_seq=2 ttl=63 time=1043 ms
+64 bytes from 1.0.0.3: icmp_seq=3 ttl=63 time=1041 ms
+```
