@@ -1,11 +1,17 @@
 #!bash
+if [ "$1" == "-f" ]; then
+  input=$(<"$2")
+else
+  stdin=$(cat)
+  input=$stdin
+fi
 
 # clear namespaces
 ip -all netns delete
 
 # add namespaces
 echo "adding nodes"
-for node in $(jq '.nodes | keys[]' < "$1")
+for node in $(jq '.nodes | keys[]' <<< "$input")
 do
   # set up alias for later use
   alias "n${node:1:-1}"="ip netns exec netlab-${node:1:-1}"  
@@ -14,12 +20,12 @@ done
 
 # iterate over edges array
 echo "adding edges"
-length=$(jq '.edges | length' < $1)
+length=$(jq '.edges | length' <<< "$input")
 for ((i=0; i<$length; i++)); do
 
   # get names of nodes
-  A=$(jq '.edges['$i'].nodes[0]' < $1)
-  B=$(jq '.edges['$i'].nodes[1]' < $1)
+  A=$(jq '.edges['$i'].nodes[0]' <<< "$input")
+  B=$(jq '.edges['$i'].nodes[1]' <<< "$input")
   A=${A:1:-1}
   B=${B:1:-1}
 
@@ -31,8 +37,8 @@ for ((i=0; i<$length; i++)); do
   ip link set "veth-$B-$A" netns "netlab-$B"
 
   # add ip addresses on each side
-  ipA=$(jq '.nodes["'$A'"].ip' < $1)
-  ipB=$(jq '.nodes["'$B'"].ip' < $1)
+  ipA=$(jq '.nodes["'$A'"].ip' <<< "$input")
+  ipB=$(jq '.nodes["'$B'"].ip' <<< "$input")
   ip netns exec "netlab-$A" ip addr add ${ipA:1:-1} dev "veth-$A-$B"
   ip netns exec "netlab-$B" ip addr add ${ipB:1:-1} dev "veth-$B-$A"
 
@@ -41,8 +47,8 @@ for ((i=0; i<$length; i++)); do
   ip netns exec "netlab-$B" ip link set dev "veth-$B-$A" up
 
   # add some connection quality issues
-  AtoB=$(jq '.edges['$i']["->"]' < $1)
-  BtoA=$(jq '.edges['$i']["<-"]' < $1)
+  AtoB=$(jq '.edges['$i']["->"]' <<< "$input")
+  BtoA=$(jq '.edges['$i']["<-"]' <<< "$input")
 
   ip netns exec "netlab-$A" tc qdisc add dev "veth-$A-$B" root netem ${AtoB:1:-1}
   ip netns exec "netlab-$B" tc qdisc add dev "veth-$B-$A" root netem ${BtoA:1:-1}
@@ -50,17 +56,17 @@ done
 
 # run startup scripts
 echo "running startup scripts"
-for node in $(jq '.nodes | keys[]' < "$1")
+for node in $(jq '.nodes | keys[]' <<< "$input")
 do
 
   # don't error on empty script array
-  scriptArr=$(jq '.nodes['$node'].startup' < $1)
+  scriptArr=$(jq '.nodes['$node'].startup' <<< "$input")
   if [ "$scriptArr" = null ]; then
     true
   else
 
     # iterate through script array
-    scripts=$(jq '.nodes['$node'].startup | values[]' < "$1")
+    scripts=$(jq '.nodes['$node'].startup | values[]' <<< "$input")
     while read -r script; do
       echo "n${node:1:-1} \$" ${script:1:-1}
       ip netns exec "netlab-${node:1:-1}" ${script:1:-1}
