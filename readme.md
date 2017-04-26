@@ -13,22 +13,13 @@ Network lab has a JSON configuration format:
 {
   "nodes": {
     "1": {
-        "ip": "1.0.0.1",
-        "startup": ["ip route add 1.0.0.2 dev veth-1-2",
-                    "ip route add 1.0.0.3 via 1.0.0.2",
-                    "sysctl -w net.ipv4.ip_forward=1"]
+        "ip": "1.0.0.1"
     },
     "2": {
-        "ip": "1.0.0.2",
-        "startup": ["ip route add 1.0.0.1 dev veth-2-1",
-                    "ip route add 1.0.0.3 dev veth-2-3",
-                    "sysctl -w net.ipv4.ip_forward=1"]
+        "ip": "1.0.0.2"
     },
     "3": {
-        "ip": "1.0.0.3",
-        "startup": ["ip route add 1.0.0.2 dev veth-3-2",
-                    "ip route add 1.0.0.1 via 1.0.0.2",
-                    "sysctl -w net.ipv4.ip_forward=1"]
+        "ip": "1.0.0.3"
     }
   },
   "edges": [
@@ -49,7 +40,6 @@ Network lab has a JSON configuration format:
 
 The `nodes` object has all the nodes, indexed by name.
 - The `ip` property will be set as the node's IP addres
-- The `startup` property contains an array of commands that will be executed in the node's network namespace once everything is set up.
 
 The `edges` object contains an array of edges.
 - The `nodes` array contains the node names of the 2 sides of the edge.
