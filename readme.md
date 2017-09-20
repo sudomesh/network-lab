@@ -50,7 +50,7 @@ Most operations on network namespaces require `sudo`, and the network-lab sets s
 
 ```bash
 sudo -i
-source ./network-lab.sh example-network.json
+source ./network-lab.sh -f example-network.json
 ```
 
 To do operations inside the namespaces, you can now use the aliases defined by the script:
