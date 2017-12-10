@@ -1,0 +1,6 @@
+{
+  "name": "network-lab",
+  "version": "0.0.1",
+  "description": "Lightweight network sim",
+  "scripts": [ "network-lab.sh" ]
+}
