@@ -47,23 +47,3 @@ for ((i=0; i<$length; i++)); do
   ip netns exec "netlab-$A" tc qdisc add dev "veth-$A-$B" root netem ${AtoB:1:-1}
   ip netns exec "netlab-$B" tc qdisc add dev "veth-$B-$A" root netem ${BtoA:1:-1}
 done
-
-# run startup scripts
-echo "running startup scripts"
-for node in $(jq '.nodes | keys[]' <<< "$input")
-do
-
-  # don't error on empty script array
-  scriptArr=$(jq '.nodes['$node'].startup' <<< "$input")
-  if [ "$scriptArr" = null ]; then
-    true
-  else
-
-    # iterate through script array
-    scripts=$(jq '.nodes['$node'].startup | values[]' <<< "$input")
-    while read -r script; do
-      echo "n${node:1:-1} \$" ${script:1:-1}
-      ip netns exec "netlab-${node:1:-1}" ${script:1:-1}
-    done <<< "$scripts"
-  fi
-done
