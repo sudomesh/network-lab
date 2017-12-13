@@ -16,38 +16,13 @@ Network lab has a JSON configuration format:
 {
   "nodes": {
     "1": {
-<<<<<<< HEAD
-      "ip": "1.0.0.1",
-      "startup": [
-        "ip route add 1.0.0.2 dev veth-1-2",
-        "ip route add 1.0.0.3 via 1.0.0.2",
-        "sysctl -w net.ipv4.ip_forward=1"
-      ]
+      "ip": "1.0.0.1"
     },
     "2": {
-      "ip": "1.0.0.2",
-      "startup": [
-        "ip route add 1.0.0.1 dev veth-2-1",
-        "ip route add 1.0.0.3 dev veth-2-3",
-        "sysctl -w net.ipv4.ip_forward=1"
-      ]
+      "ip": "1.0.0.2"
     },
     "3": {
-      "ip": "1.0.0.3",
-      "startup": [
-        "ip route add 1.0.0.2 dev veth-3-2",
-        "ip route add 1.0.0.1 via 1.0.0.2",
-        "sysctl -w net.ipv4.ip_forward=1"
-      ]
-=======
-        "ip": "1.0.0.1"
-    },
-    "2": {
-        "ip": "1.0.0.2"
-    },
-    "3": {
-        "ip": "1.0.0.3"
->>>>>>> 6f7434fd00437581d5143f64f54fa53237df2740
+      "ip": "1.0.0.3"
     }
   },
   "edges": [
@@ -66,13 +41,8 @@ Network lab has a JSON configuration format:
 ```
 
 The `nodes` object has all the nodes, indexed by name.
-<<<<<<< HEAD
 
 * The `ip` property will be set as the node's IP addres
-* The `startup` property contains an array of commands that will be executed in the node's network namespace once everything is set up.
-=======
-- The `ip` property will be set as the node's IP addres
->>>>>>> 6f7434fd00437581d5143f64f54fa53237df2740
 
 The `edges` object contains an array of edges.
 
@@ -82,7 +52,6 @@ The `edges` object contains an array of edges.
 ## Usage
 
 ```bash
-<<<<<<< HEAD
 sudo su
 source ./network-lab.sh  << EOF
 {
@@ -90,13 +59,6 @@ source ./network-lab.sh  << EOF
     "1": { "ip": "1.0.0.1" },
     "2": { "ip": "1.0.0.2" },
     "3": { "ip": "1.0.0.3" }  
-=======
-sudo -i
-source ./network-lab.sh -f example-network.json
-```
-
-To do operations inside the namespaces, you can now use the aliases defined by the script:
->>>>>>> 6f7434fd00437581d5143f64f54fa53237df2740
 
 },
   "edges": [
