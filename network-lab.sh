@@ -3,7 +3,7 @@ stdin=$(cat)
 input=$stdin
 
 # clear namespaces
-ip -all netns delete
+ip -all netns delete || true
 
 # add namespaces
 echo "adding nodes"
